@@ -1,9 +1,13 @@
 package t4.eao;
 
+import java.util.ArrayList;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import t4.entities.Person;
 import t4.entities.Role;
 
 /**
@@ -17,8 +21,13 @@ public class RoleEAOImpl implements RoleEAOLocal {
 	
 	public RoleEAOImpl() {
 	}
+	
+	public ArrayList<Role> findAllRoles() {
+		Query query = em.createQuery("select r from Role r");
+		return (ArrayList<Role>) query.getResultList();
+	}
 
-	public Role findByRoleName(String roleName) {
+	public Role findRoleByRoleName(String roleName) {
 		return em.find(Role.class, roleName);
 	}
 
@@ -33,7 +42,7 @@ public class RoleEAOImpl implements RoleEAOLocal {
 	}
 
 	public void deleteRole(String roleName) {
-		Role r = this.findByRoleName(roleName);
+		Role r = this.findRoleByRoleName(roleName);
 		if (r != null)
 			em.remove(r);
 	}

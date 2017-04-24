@@ -1,5 +1,7 @@
 package t4.facade;
 
+import java.util.ArrayList;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -22,9 +24,15 @@ public class Facade implements FacadeLocal {
 
 	public Facade() {
 	}
+	
+	// LOGIN
+	
+	public ArrayList<Login> findAllLogins() {
+		return this.loginEAO.findAllLogins();
+	}
 
-	public Login findByPersonId(String personId) {
-		return this.loginEAO.findByPersonId(personId);
+	public Login findLoginByPersonId(String personId) {
+		return this.loginEAO.findLoginByPersonId(personId);
 	}
 
 	public Login createLogin(Login login) {
@@ -38,9 +46,16 @@ public class Facade implements FacadeLocal {
 	public void deleteLogin(String personId) {
 		this.loginEAO.deleteLogin(personId);
 	}
+	
+	
+	// PERSON
+	
+	public ArrayList<Person> findAllPersons() {
+		return this.personEAO.findAllPersons();
+	}
 
 	public Person findPersonByPersonId(String personId) {
-		return this.personEAO.findByPersonId(personId);
+		return this.personEAO.findPersonByPersonId(personId);
 	}
 
 	public Person createPerson(Person person) {
@@ -54,9 +69,15 @@ public class Facade implements FacadeLocal {
 	public void deletePerson(String personId) {
 		this.personEAO.deletePerson(personId);
 	}
+	
+	// ROLE
+	
+	public ArrayList<Role> findAllRoles() {
+		return this.roleEAO.findAllRoles();
+	}
 
 	public Role findRoleByRoleName(String roleName) {
-		return this.roleEAO.findByRoleName(roleName);
+		return this.roleEAO.findRoleByRoleName(roleName);
 	}
 
 	public Role createRole(Role role) {

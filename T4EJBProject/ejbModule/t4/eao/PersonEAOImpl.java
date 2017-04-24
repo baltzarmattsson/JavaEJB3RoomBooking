@@ -1,8 +1,11 @@
 package t4.eao;
 
+import java.util.ArrayList;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import t4.entities.Person;
 
@@ -17,8 +20,13 @@ public class PersonEAOImpl implements PersonEAOLocal {
 
 	public PersonEAOImpl() {
 	}
+	
+	public ArrayList<Person> findAllPersons() {
+		Query query = em.createQuery("select p from Person p");
+		return (ArrayList<Person>) query.getResultList();
+	}
 
-	public Person findByPersonId(String personId) {
+	public Person findPersonByPersonId(String personId) {
 		return em.find(Person.class, personId);
 	}
 
@@ -34,7 +42,7 @@ public class PersonEAOImpl implements PersonEAOLocal {
 	}
 
 	public void deletePerson(String personId) {
-		Person p = this.findByPersonId(personId);
+		Person p = this.findPersonByPersonId(personId);
 		if (p != null)
 			em.remove(p);
 	}
