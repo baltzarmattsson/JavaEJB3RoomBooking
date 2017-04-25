@@ -93,11 +93,57 @@ public class T4AdminServlet extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Post new user
 		
-		//Post new login
+		String url = null;
 		
-		//Post new role
+		try {
+			String operation = request.getParameter("operation");
+			
+			switch (operation) {
+			
+			// LOGIN
+			case "addLogin":
+				String personId = request.getParameter("personId");
+				String password = request.getParameter("password");
+				Login loginForPerson = facade.findLoginByPersonId(personId);
+				
+				if (loginForPerson == null) {
+					Person person = facade.findPersonByPersonId(personId);
+					loginForPerson = new Login();
+					loginForPerson.setPerson(person);
+					loginForPerson.setPassword(password);
+					facade.createLogin(loginForPerson);
+				} else {
+					loginForPerson.setPassword(password);
+					facade.updateLogin(loginForPerson);
+				}
+				break;
+				
+			// PERSON
+			case "addPerson":
+				Person person = new Person();
+				person.setId(request.getParameter("personId"));
+				person.setName(request.getParameter("personName"));
+				person.setEmail(request.getParameter("personEmail"));
+				person.setPhoneNbr(request.getParameter("personPhoneNbr"));
+				
+				Role personRole = facade.findRoleByRoleName(request.getParameter("roleName"));
+				person.setRole(personRole);
+				facade.createPerson(person);
+				request.setAttribute("responseMessage", "Person created");
+				break;
+				
+			// ROLE
+			case "addRole":
+				Role role = new Role();
+				role.setName(request.getParameter("roleName"));
+				facade.createRole(role);
+				request.setAttribute("responseMessage", "Role created");
+				break;
+			}
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 }

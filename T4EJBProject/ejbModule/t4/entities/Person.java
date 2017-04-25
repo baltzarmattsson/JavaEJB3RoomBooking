@@ -73,11 +73,11 @@ public class Person implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="rolename", referencedColumnName="name")
-	public Role getRoleName() {
+	public Role getRole() {
 		return roleName;
 	}
 
-	public void setRoleName(Role roleName) {
+	public void setRole(Role roleName) {
 		this.roleName = roleName;
 	}
 }
