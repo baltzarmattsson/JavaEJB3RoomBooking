@@ -17,7 +17,7 @@ import t4.entities.Role;
 import t4.facade.FacadeLocal;
 
 
-@WebServlet("/T4Admin")
+@WebServlet("/T4AdminServlet")
 public class T4AdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -102,9 +102,22 @@ public class T4AdminServlet extends HttpServlet {
 			switch (operation) {
 			
 			// LOGIN
+			
+			case "loginUser":
+				String username = request.getParameter("username");
+				String password = request.getParameter("password");
+				Login login = facade.findLoginByPersonId(username);
+				if (login != null && login.getPassword().equals(password)) {
+					request.setAttribute("loggedInUser", login.getPerson());
+					url = "/editor.jsp";
+				} else {
+					request.setAttribute("loginError", "Login failed, either the credentials are wrong or the user does not have a login");
+				}
+				
+				break;
 			case "addLogin":
 				String personId = request.getParameter("personId");
-				String password = request.getParameter("password");
+				password = request.getParameter("password");
 				Login loginForPerson = facade.findLoginByPersonId(personId);
 				
 				if (loginForPerson == null) {
