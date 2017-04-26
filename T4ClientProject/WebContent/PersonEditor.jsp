@@ -8,7 +8,6 @@
 </head>
 <body style="background: white;">
 	<h2>Person</h2>
-	<br>
 	<label>Id:</label>
 	<br>
 	<input name=name type=text />
