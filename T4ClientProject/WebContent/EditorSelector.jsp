@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="t4.entities.Person"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -14,10 +16,23 @@
 	<br>
 	<br> Edit
 	<br>
-	<select name="selectObjects">
-		<option value="" selected>Select...</option>
-	</select>
+	<form action="/T4ClientProject/T4AdminServlet" method="post">
+		<select name="selectedPerson" style="width: 180px; ">
+			<% 	ArrayList<Person> allPersons = (ArrayList<Person>)request.getAttribute("allPersons");
+	
+			for (int i = 0; i < allPersons.size(); i++) { 
+					Person p = allPersons.get(i);
+				%>
+				<option name="selectedPerson" value="<%=p.getId()%>">Test asd <%=p.getId()%></option>
+			<% } %>
+		</select>
+		<input class="btn" type=submit value="Edit selected person" />
+		<input name="operation" value="editPerson" type="hidden" />
+	</form>
 	<br>
-	<input name=btn type=button value="Create new">
+	<form action="/T4ClientProject/T4AdminServlet" method="post">
+		<input class="btn" type=submit value="Create new person" />
+		<input name="operation" value="createNewPerson" type="hidden" />
+	</form>
 </body>
 </html>

@@ -3,14 +3,17 @@ package t4.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javafx.scene.chart.PieChart.Data;
 import t4.entities.Login;
 import t4.entities.Person;
 import t4.entities.Role;
@@ -47,7 +50,7 @@ public class T4AdminServlet extends HttpServlet {
 					request.setAttribute("login", login);
 					
 				} else {
-					request.setAttribute("responseLabel", "Login not found");
+					request.setAttribute("responseLabel", "INFO: Login not found");
 				}
 				break;
 			
@@ -63,7 +66,7 @@ public class T4AdminServlet extends HttpServlet {
 					request.setAttribute("role", role);
 					
 				} else {
-					request.setAttribute("responseLabel", "Role not found");
+					request.setAttribute("responseLabel", "INFO: Role not found");
 				}
 				break;
 			case "getAllPersons":
@@ -78,18 +81,32 @@ public class T4AdminServlet extends HttpServlet {
 					request.setAttribute("person", person);
 					
 				} else {
-					request.setAttribute("responseLabel", "Person not found");
+					request.setAttribute("responseLabel", "INFO: Person not found");
 				}
 				break;
+			case "createNewPerson":
+				System.out.println("ASDASDASDSDASD");
+				request.setAttribute("allRoles", this.facade.findAllRoles());
+				request.setAttribute("mode", "Create");
+				request.setAttribute("test", "test");
+				url = "/PersonEditor.jsp";
+				break;
+				
+			case "editPerson":
+				personId = request.getParameter("personId");
+				Person p = this.facade.findPersonByPersonId(personId);
+
+				request.setAttribute("test", "test");
+				request.setAttribute("allRoles", this.facade.findAllRoles());
+				request.setAttribute("personToEdit", p);
+				request.setAttribute("mode", "Edit");
+				url = "/PersonEditor.jsp";
+				break;
 			}
-			
-			
 			
 		} catch (Exception e) {
 			
 		}
-		
-		
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -102,21 +119,41 @@ public class T4AdminServlet extends HttpServlet {
 			switch (operation) {
 			
 			// LOGIN
-			
+			case "createNewPerson":
+				System.out.println("ASDASDASDSDASD");
+				request.setAttribute("allRoles", this.facade.findAllRoles());
+				request.setAttribute("mode", "Create");
+				request.setAttribute("test", "test");
+				url = "/PersonEditor.jsp";
+				break;
+				
+			case "editPerson":
+				String personId = request.getParameter("selectedPerson");
+				Person p = this.facade.findPersonByPersonId(personId);
+
+				request.setAttribute("test", "test");
+				request.setAttribute("allRoles", this.facade.findAllRoles());
+				request.setAttribute("personToEdit", p);
+				request.setAttribute("mode", "Edit");
+				url = "/PersonEditor.jsp";
+				break;
 			case "loginUser":
 				String username = request.getParameter("username");
 				String password = request.getParameter("password");
 				Login login = facade.findLoginByPersonId(username);
 				if (login != null && login.getPassword().equals(password)) {
+					url = "/EditorSelector.jsp";
 					request.setAttribute("loggedInUser", login.getPerson());
-					url = "/editor.jsp";
+					request.setAttribute("allPersons", facade.findAllPersons());
 				} else {
-					request.setAttribute("loginError", "Login failed, either the credentials are wrong or the user does not have a login");
+					url = "/IndexLogin.jsp";
+					request.setAttribute("responseLabel", "ERROR: Login failed, either the credentials are wrong or the user does not have a login");
 				}
-				
+				System.out.println("breaking");
 				break;
+				
 			case "addLogin":
-				String personId = request.getParameter("personId");
+				personId = request.getParameter("personId");
 				password = request.getParameter("password");
 				Login loginForPerson = facade.findLoginByPersonId(personId);
 				
@@ -126,9 +163,11 @@ public class T4AdminServlet extends HttpServlet {
 					loginForPerson.setPerson(person);
 					loginForPerson.setPassword(password);
 					facade.createLogin(loginForPerson);
+					request.setAttribute("responseMessage", "SUCCESS: Login created");
 				} else {
 					loginForPerson.setPassword(password);
 					facade.updateLogin(loginForPerson);
+					request.setAttribute("responseMessage", "SUCCESS: Login updated");
 				}
 				break;
 				
@@ -143,7 +182,7 @@ public class T4AdminServlet extends HttpServlet {
 				Role personRole = facade.findRoleByRoleName(request.getParameter("roleName"));
 				person.setRole(personRole);
 				facade.createPerson(person);
-				request.setAttribute("responseMessage", "Person created");
+				request.setAttribute("responseMessage", "SUCCESS: Person created");
 				break;
 				
 			// ROLE
@@ -151,9 +190,12 @@ public class T4AdminServlet extends HttpServlet {
 				Role role = new Role();
 				role.setName(request.getParameter("roleName"));
 				facade.createRole(role);
-				request.setAttribute("responseMessage", "Role created");
+				request.setAttribute("responseMessage", "SUCCESS: Role created");
 				break;
 			}
+
+			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+			rd.forward(request, response);
 		} catch (Exception e) {
 			throw e;
 		}
