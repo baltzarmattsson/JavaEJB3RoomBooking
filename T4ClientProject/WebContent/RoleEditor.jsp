@@ -16,14 +16,21 @@
 		
 			
 		<% 		
-			Role r = new Role();
+			Object roleObj = request.getAttribute("roleSubject");
+		
+			Role r;
+			if (roleObj != null)
+				r = (Role)roleObj;
+			else
+				r = new Role();
+
 			request.setAttribute("roleSubject", r);	
 		%>
 		
 		<label>Name:</label><br>
-		<input name="personId" type=text value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
+		<input name="roleName" type=text value="${roleSubject.getName()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
 
-		<input type="submit" name=${editing ? "" : "createRole" } disabled=${ editing } value="Save" />
+		<input type="submit" name=${editing ? "" : "createRole" } ${ editing ? 'disabled' : ''} value="Save" />
 		<div style="display:${editing ? 'inline' : 'none'}">
 			<input type="submit" name="deleteRole" value="Delete" />
 		</div>
@@ -31,27 +38,9 @@
 
 	</form>
 	
-	<!-- *********************** -->
-	<hr>
-	<!-- *********************** -->
-
-	<h2>Login password</h2>
-	<label>New password</label>
-	<br>
-	<input type=password>
-	<br>
-	<label>Confirm password</label>
-	<br>
-	<input type=password>
-	<br>
-	<input type=button value=Save>
-	<input type=button value=Delete>
-
-
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
 		<input class="btn" type="submit" value="Go back"/>
-		<input name="operation" value="goToPersonSelectorPage" type="hidden"/>
+		<input name="operation" value="goToEditorSelectorPage" type="hidden"/>
 	</form>
-
 </body>
 </html>
