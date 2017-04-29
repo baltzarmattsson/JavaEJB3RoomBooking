@@ -16,12 +16,8 @@
 		<input name="operation" value="loginUser"
 			type="hidden" />
 	</form>
-	
-	<% if (request.getAttribute("responseLabel") != null) { %>
-	<center><%=request.getAttribute("responseLabel")%></center>
-	<% } else { %>
-	<center>Responselabel has nuthin</center>
-	<% } %>
+		
+	<div style="display:${responseLabel != null ? 'block' : 'none'}">${responseLabel}</div>
 
 </body>
 </html>

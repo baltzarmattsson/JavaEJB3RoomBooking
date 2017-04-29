@@ -85,9 +85,8 @@ public class T4AdminServlet extends HttpServlet {
 				}
 				break;
 			case "createNewPerson":
-				System.out.println("ASDASDASDSDASD");
 				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("mode", "Create");
+				request.setAttribute("editing", false);
 				request.setAttribute("test", "test");
 				url = "/PersonEditor.jsp";
 				break;
@@ -99,7 +98,7 @@ public class T4AdminServlet extends HttpServlet {
 				request.setAttribute("test", "test");
 				request.setAttribute("allRoles", this.facade.findAllRoles());
 				request.setAttribute("personToEdit", p);
-				request.setAttribute("mode", "Edit");
+				request.setAttribute("editing", true);
 				url = "/PersonEditor.jsp";
 				break;
 			}
@@ -120,9 +119,8 @@ public class T4AdminServlet extends HttpServlet {
 			
 			// LOGIN
 			case "createNewPerson":
-				System.out.println("ASDASDASDSDASD");
 				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("mode", "Create");
+				request.setAttribute("editing", false);
 				request.setAttribute("test", "test");
 				url = "/PersonEditor.jsp";
 				break;
@@ -133,9 +131,55 @@ public class T4AdminServlet extends HttpServlet {
 
 				request.setAttribute("test", "test");
 				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("personToEdit", p);
-				request.setAttribute("mode", "Edit");
+				request.setAttribute("personSubject", p);
+				request.setAttribute("editing", true);
 				url = "/PersonEditor.jsp";
+				break;
+				
+			case "saveNewPerson": 
+				System.out.println("**Saving newp erson**: " + request.getParameter("editing"));
+
+				Person newPerson = new Person();
+				newPerson.setId(request.getParameter("personId"));
+				newPerson.setName(request.getParameter("personName"));
+				newPerson.setEmail(request.getParameter("personEmail"));
+				newPerson.setPhoneNbr(request.getParameter("personPhoneNbr"));
+				
+				String roleName = request.getParameter("roleName");
+				Role role = facade.findRoleByRoleName(roleName);
+				newPerson.setRole(role);
+				
+				facade.createPerson(newPerson);
+				
+				request.setAttribute("editing", true);
+				request.setAttribute("personSubject", newPerson);
+				url = "/PersonEditor.jsp";
+				
+				break;
+			case "updateExistingPerson":
+				System.out.println("**updating existing");
+				
+				Person existing = new Person();
+				existing.setId(request.getParameter("personId"));
+				existing.setName(request.getParameter("personName"));
+				existing.setEmail(request.getParameter("personEmail"));
+				existing.setPhoneNbr(request.getParameter("personPhoneNbr"));
+				
+				roleName = request.getParameter("roleName");
+				role = facade.findRoleByRoleName(roleName);
+				existing.setRole(role);
+				
+				facade.updatePerson(existing);
+				
+				request.setAttribute("editing", true);
+				request.setAttribute("personSubject", existing);
+				url = "/PersonEditor.jsp";
+				
+				break;
+			case "deletePerson":
+				System.out.println("**deleting person**");
+				url = "/PersonEditor.jsp";
+				
 				break;
 			case "loginUser":
 				String username = request.getParameter("username");
@@ -149,7 +193,6 @@ public class T4AdminServlet extends HttpServlet {
 					url = "/IndexLogin.jsp";
 					request.setAttribute("responseLabel", "ERROR: Login failed, either the credentials are wrong or the user does not have a login");
 				}
-				System.out.println("breaking");
 				break;
 				
 			case "addLogin":
@@ -187,7 +230,7 @@ public class T4AdminServlet extends HttpServlet {
 				
 			// ROLE
 			case "addRole":
-				Role role = new Role();
+				role = new Role();
 				role.setName(request.getParameter("roleName"));
 				facade.createRole(role);
 				request.setAttribute("responseMessage", "SUCCESS: Role created");

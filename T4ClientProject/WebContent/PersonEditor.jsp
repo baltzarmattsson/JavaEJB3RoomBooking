@@ -1,6 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="t4.entities.Role"%>
 <%@page import="t4.entities.Person"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,58 +11,55 @@
 <title>Insert title here</title>
 </head>
 <body style="background: white;">
-	<h2>
-	<%=request.getAttribute("mode")%> Person</h2>
+	<h2>${editing ? "Edit" : "Create"} Person</h2>
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
 		
 			
-		<% boolean editing = 
-			((String)request.getAttribute("mode")).equalsIgnoreCase("edit");
-
-			ArrayList<Role> allRoles = (ArrayList<Role>)request.getAttribute("allRoles");
-		/**/
-			Object personObj = request.getAttribute("personToEdit");
+		<% 
+			Object personObj = request.getAttribute("personSubject");
 			Person p;
 			if (personObj != null) {
 				p = (Person)personObj;
 			} else {
 				p = new Person();
 			}
-			
-			//Person p = new Person();
-			String id = p.getId() == null ? "" : p.getId();
-			String name = p.getName() == null ? "" : p.getName();
-			String email = p.getEmail() == null ? "" : p.getEmail();
-			String phoneNbr = p.getPhoneNbr() == null ? "" : p.getPhoneNbr();
-			Role role = p.getRole();
+			request.setAttribute("personSubject", p);
 			
 		%>
 		
 		<label>Id:</label><br>
-		<input name="personId" type=text value=<%=id%>><br>
+		<input name="personId" type=text value="${personSubject.getId()}"><br>
 		
 		<label>Name:</label><br>
-		<input name="personName" type=text value=<%=name%>><br>
+		<input name="personName" type=text value="${personSubject.getName()}"><br>
 		
 		<label>Email:</label><br>
-		<input name="personEmail" type=text value=<%=email%>><br>
+		<input name="personEmail" type=text value="${personSubject.getEmail()}"><br>
 		
 		<label>Phone Number:</label><br>
-		<input name="personPhoneNbr" type=text value=<%=phoneNbr%>><br>
+		<input name="personPhoneNbr" type=text value="${personSubject.getPhoneNbr()}"><br>
 		
 		<label>Role</label> <br> 
 		<select name="roleName">
-			<% for (Role r : allRoles) { %>
-				<option selected=<%=r.equals(role)%>
-					<%=r.getName()%>><%=r.getName()%></option>			
-			<% } %>
+			<option value=null selected></option>
+			<c:forEach items="${allRoles}" var="role">
+				<option value="${role.getName()}"
+					${personSubject.getRole() != null && role.equals(personSubject.getRole()) ? 'selected' : '' }
+				>${role.getName()}</option>
+			</c:forEach>
 		</select> 
 		<br> 
 		
-		<input type=button value=Save>
-		<input type=button value=Delete>
+		<input type="submit" value="Save">
+		<input name="operation" value=${ editing ? "updateExistingPerson" : "saveNewPerson" } type="hidden"/>
 
 	</form>
+	<div style="display:${editing ? 'inline' : 'none'}">
+		<form action="/T4ClientProject/T4AdminServlet" method="post">
+			<input type="submit" value="Delete" /> <input name="operation"
+				value="deletePerson" type="hidden" />
+		</form>
+	</div>
 
 	<!-- *********************** -->
 	<hr>

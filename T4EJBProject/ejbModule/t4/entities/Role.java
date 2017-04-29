@@ -37,10 +37,13 @@ public class Role implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj == null)
 			return false;
-		if (!Person.class.isAssignableFrom(obj.getClass()))
-			return false;
-		Person other = (Person) obj;
+		Role other = (Role) obj;
 		
 		return this.getName().equals(other.getName());
+	}
+	
+	@Override
+	public String toString() {
+		return this.getName();
 	}
 }

@@ -1,6 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="t4.entities.Person"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -17,15 +18,13 @@
 	<br> Edit
 	<br>
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
-		<select name="selectedPerson" style="width: 180px; ">
-			<% 	ArrayList<Person> allPersons = (ArrayList<Person>)request.getAttribute("allPersons");
 	
-			for (int i = 0; i < allPersons.size(); i++) { 
-					Person p = allPersons.get(i);
-				%>
-				<option name="selectedPerson" value="<%=p.getId()%>">Test asd <%=p.getId()%></option>
-			<% } %>
+		<select name="selectedPerson">
+			<c:forEach items="${allPersons}" var="person">
+				<option value="${person.getId()}">Id: "${person.getId()}", Name: "${person.getName()}", Role: "${person.getRole()}"</option>
+			</c:forEach>
 		</select>
+		
 		<input class="btn" type=submit value="Edit selected person" />
 		<input name="operation" value="editPerson" type="hidden" />
 	</form>
