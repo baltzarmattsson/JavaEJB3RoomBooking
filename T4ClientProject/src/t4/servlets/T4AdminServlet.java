@@ -151,7 +151,7 @@ public class T4AdminServlet extends HttpServlet {
 					break;
 				
 				case "goToPersonSelectorPage":
-					url = "/EditorSelector.jsp";
+					url = "/PersonSelector.jsp";
 					request.setAttribute("allPersons", facade.findAllPersons());					
 					break;
 					
@@ -160,7 +160,7 @@ public class T4AdminServlet extends HttpServlet {
 					String password = request.getParameter("password");
 					Login login = facade.findLoginByPersonId(username);
 					if (login != null && login.getPassword().equals(password)) {
-						url = "/EditorSelector.jsp";
+						url = "/PersonSelector.jsp";
 						request.setAttribute("loggedInUser", login.getPerson());
 						request.setAttribute("allPersons", facade.findAllPersons());
 					} else {
@@ -214,14 +214,18 @@ public class T4AdminServlet extends HttpServlet {
 
 		String personId = request.getParameter("personId");
 		if (mode == Mode.DELETE) {
-			this.facade.deletePerson(personId);
+			if (!personId.equals("1")) {
+				this.facade.deletePerson(personId);
+			} else {
+				request.setAttribute("responseLabel", "Cannot delete Admin \"1\"");
+			}
 		} else {
 			Person person = new Person();
 			person.setId(personId);
 			person.setName(request.getParameter("personName"));
 			person.setEmail(request.getParameter("personEmail"));
 			person.setPhoneNbr(request.getParameter("personPhoneNbr"));
-			
+
 			System.out.println("****: " + personId);
 
 			String roleName = request.getParameter("roleName");

@@ -11,12 +11,13 @@
 </head>
 <body style="background: white;">
 	<h2>Choose editor</h2>
-	<input name=radiobtn type=radio value="person">Person and login
+	<input name=radiobtn type=radio value="person" checked>Person and login
 	<br>
 	<input name=radiobtn type=radio value="role">Role
 	<br>
 	<br> Edit
 	<br>
+	
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
 	
 		<select name="selectedPerson">
@@ -33,5 +34,7 @@
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
 		<input name="operation" value="goToPersonEditPage" type="hidden" />
 	</form>
+	
+	</div>
 </body>
 </html>

@@ -56,13 +56,6 @@
 		<input name="operation" value="personModification" type="hidden"/>
 
 	</form>
-	
-		<form action="/T4ClientProject/T4AdminServlet" method="post">
-			 <input name="operation"
-				value="deletePerson" type="hidden" />
-		</form>
-
-
 	<!-- *********************** -->
 	<hr>
 	<!-- *********************** -->
