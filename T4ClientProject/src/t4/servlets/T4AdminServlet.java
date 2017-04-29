@@ -144,6 +144,7 @@ public class T4AdminServlet extends HttpServlet {
 				Role role = this.handleRoleModification(request, mode);
 				url = this.fillRequestWithRoleInfoAndReturnUrl(role, request);
 				
+			// DELETE/CREATE LOGIN
 			} else if (operation.equals("loginModification")) { 
 			
 				Mode mode = null;
@@ -151,11 +152,14 @@ public class T4AdminServlet extends HttpServlet {
 					mode = Mode.DELETE;
 				} else if (request.getParameter("createLogin") != null) {
 					mode = Mode.CREATE;
+				} else if (request.getParameter("updateLogin") != null) {
+					mode = Mode.UPDATE;
 				}
-				Login login = this.handleLoginModification(request, mode);
-				url = this.fillRequestWithPersonInfoAndReturnUrl(login == null ? null : login.getPerson(), request);
+				this.handleLoginModification(request, mode);
+				Person person = this.facade.findPersonByPersonId(request.getParameter("personId"));
+				url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
 				
-			}else {
+			} else {
 				switch (operation) {
 				
 				case "goToPersonEditPage":
@@ -342,11 +346,12 @@ public class T4AdminServlet extends HttpServlet {
 
 	private Login handleLoginModification(HttpServletRequest request, Mode mode) {
 
-		String personId = request.getParameter("username");
+		String personId = request.getParameter("personId");
 		Person loginOwner = facade.findPersonByPersonId(personId);
 		if (loginOwner != null) {
 			if (mode == Mode.DELETE) {
 				this.facade.deleteLogin(personId);
+				request.setAttribute("personId", personId);
 			} else {
 				String password, confirmPassword;
 				password = request.getParameter("password");
@@ -365,7 +370,6 @@ public class T4AdminServlet extends HttpServlet {
 					request.setAttribute("responseLabel", "Passwords doesnt match");
 				}
 			}
-
 		} else {
 			request.setAttribute("responseLabel", "Could not find owner (person)");
 		}

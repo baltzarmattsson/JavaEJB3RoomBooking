@@ -78,7 +78,7 @@
 			
 			<label>Username</label>
 			<br>
-				<input name="username" type=text readonly style="background: lightgray;" value="${ personSubject.getId() }" />
+				<input name="personId" type=text readonly style="background: lightgray;" value="${ personSubject.getId() }" />
 						<br>			
 			<label>Current password</label>
 			<br>
