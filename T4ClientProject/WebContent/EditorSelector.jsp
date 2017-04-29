@@ -25,13 +25,13 @@
 			</c:forEach>
 		</select>
 		
-		<input class="btn" type=submit value="Edit selected person" />
-		<input name="operation" value="editPerson" type="hidden" />
+		<input class="btn" name="editing" type=submit value="Edit selected person" />
+		<input class="btn" name="creating" type=submit value="Create new person" />
+		<input name="operation" value="goToPersonEditPage" type="hidden" />
 	</form>
 	<br>
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
-		<input class="btn" type=submit value="Create new person" />
-		<input name="operation" value="createNewPerson" type="hidden" />
+		<input name="operation" value="goToPersonEditPage" type="hidden" />
 	</form>
 </body>
 </html>

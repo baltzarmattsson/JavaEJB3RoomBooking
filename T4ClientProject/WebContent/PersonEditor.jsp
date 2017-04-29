@@ -17,18 +17,17 @@
 			
 		<% 
 			Object personObj = request.getAttribute("personSubject");
+		
 			Person p;
-			if (personObj != null) {
+			if (personObj != null)
 				p = (Person)personObj;
-			} else {
+			else
 				p = new Person();
-			}
-			request.setAttribute("personSubject", p);
-			
+			request.setAttribute("personSubject", p);	
 		%>
 		
 		<label>Id:</label><br>
-		<input name="personId" type=text value="${personSubject.getId()}"><br>
+		<input name="personId" type=text value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
 		
 		<label>Name:</label><br>
 		<input name="personName" type=text value="${personSubject.getName()}"><br>
@@ -50,16 +49,19 @@
 		</select> 
 		<br> 
 		
-		<input type="submit" value="Save">
-		<input name="operation" value=${ editing ? "updateExistingPerson" : "saveNewPerson" } type="hidden"/>
+		<input type="submit" name=${editing ? "updatePerson" : "createPerson" } value="Save" />
+		<div style="display:${editing ? 'inline' : 'none'}">
+			<input type="submit" name="deletePerson" value="Delete" />
+		</div>
+		<input name="operation" value="personModification" type="hidden"/>
 
 	</form>
-	<div style="display:${editing ? 'inline' : 'none'}">
+	
 		<form action="/T4ClientProject/T4AdminServlet" method="post">
-			<input type="submit" value="Delete" /> <input name="operation"
+			 <input name="operation"
 				value="deletePerson" type="hidden" />
 		</form>
-	</div>
+
 
 	<!-- *********************** -->
 	<hr>
@@ -78,6 +80,11 @@
 	<input type=button value=Save>
 	<input type=button value=Delete>
 
+
+	<form action="/T4ClientProject/T4AdminServlet" method="post">
+		<input class="btn" type="submit" value="Go back"/>
+		<input name="operation" value="goToPersonSelectorPage" type="hidden"/>
+	</form>
 
 </body>
 </html>

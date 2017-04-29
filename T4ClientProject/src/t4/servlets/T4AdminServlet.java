@@ -108,6 +108,9 @@ public class T4AdminServlet extends HttpServlet {
 		}
 	}
 	
+
+//	<input name="operation" value=${ editing ? "updateExistingPerson" : "saveNewPerson" } type="hidden"/>
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String url = null;
@@ -115,126 +118,85 @@ public class T4AdminServlet extends HttpServlet {
 		try {
 			String operation = request.getParameter("operation");
 			
-			switch (operation) {
+			// UPDATE/DELETE/CREATE Person
+			if (operation.equals("personModification")) {
 			
-			// LOGIN
-			case "createNewPerson":
-				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("editing", false);
-				request.setAttribute("test", "test");
-				url = "/PersonEditor.jsp";
-				break;
+				Mode mode = null;				
+				if (request.getParameter("deletePerson") != null) {
+					mode = Mode.DELETE;
+				} else if (request.getParameter("updatePerson") != null) {
+					mode = Mode.UPDATE;
+				} else if (request.getParameter("createPerson") != null) {
+					mode = Mode.CREATE;
+				}
+				Person person = this.handlePersonModification(request, mode);
+				url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
+			} else {
+				switch (operation) {
 				
-			case "editPerson":
-				String personId = request.getParameter("selectedPerson");
-				Person p = this.facade.findPersonByPersonId(personId);
-
-				request.setAttribute("test", "test");
-				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("personSubject", p);
-				request.setAttribute("editing", true);
-				url = "/PersonEditor.jsp";
-				break;
+				case "goToPersonEditPage":
+					
+					boolean editing = request.getParameter("editing") != null;
+					request.setAttribute("editing", editing);
+					
+					Person subject = null;
+					if (editing) {					
+						String personId = request.getParameter("selectedPerson");
+						subject = null;
+						if (personId != null) {
+							subject = facade.findPersonByPersonId(personId);
+						}
+					}
+					url = this.fillRequestWithPersonInfoAndReturnUrl(subject, request);
+					break;
 				
-			case "saveNewPerson": 
-				System.out.println("**Saving newp erson**: " + request.getParameter("editing"));
-
-				Person newPerson = new Person();
-				newPerson.setId(request.getParameter("personId"));
-				newPerson.setName(request.getParameter("personName"));
-				newPerson.setEmail(request.getParameter("personEmail"));
-				newPerson.setPhoneNbr(request.getParameter("personPhoneNbr"));
-				
-				String roleName = request.getParameter("roleName");
-				Role role = facade.findRoleByRoleName(roleName);
-				newPerson.setRole(role);
-				
-				facade.createPerson(newPerson);
-				
-				request.setAttribute("editing", true);
-				request.setAttribute("personSubject", newPerson);
-				url = "/PersonEditor.jsp";
-				
-				break;
-			case "updateExistingPerson":
-				System.out.println("**updating existing");
-				
-				Person existing = new Person();
-				existing.setId(request.getParameter("personId"));
-				existing.setName(request.getParameter("personName"));
-				existing.setEmail(request.getParameter("personEmail"));
-				existing.setPhoneNbr(request.getParameter("personPhoneNbr"));
-				
-				roleName = request.getParameter("roleName");
-				role = facade.findRoleByRoleName(roleName);
-				existing.setRole(role);
-				
-				facade.updatePerson(existing);
-				
-				request.setAttribute("editing", true);
-				request.setAttribute("personSubject", existing);
-				url = "/PersonEditor.jsp";
-				
-				break;
-			case "deletePerson":
-				System.out.println("**deleting person**");
-				url = "/PersonEditor.jsp";
-				
-				break;
-			case "loginUser":
-				String username = request.getParameter("username");
-				String password = request.getParameter("password");
-				Login login = facade.findLoginByPersonId(username);
-				if (login != null && login.getPassword().equals(password)) {
+				case "goToPersonSelectorPage":
 					url = "/EditorSelector.jsp";
-					request.setAttribute("loggedInUser", login.getPerson());
-					request.setAttribute("allPersons", facade.findAllPersons());
-				} else {
-					url = "/IndexLogin.jsp";
-					request.setAttribute("responseLabel", "ERROR: Login failed, either the credentials are wrong or the user does not have a login");
+					request.setAttribute("allPersons", facade.findAllPersons());					
+					break;
+					
+				case "loginUser":
+					String username = request.getParameter("username");
+					String password = request.getParameter("password");
+					Login login = facade.findLoginByPersonId(username);
+					if (login != null && login.getPassword().equals(password)) {
+						url = "/EditorSelector.jsp";
+						request.setAttribute("loggedInUser", login.getPerson());
+						request.setAttribute("allPersons", facade.findAllPersons());
+					} else {
+						url = "/IndexLogin.jsp";
+						request.setAttribute("responseLabel",
+								"ERROR: Login failed, either the credentials are wrong or the user does not have a login");
+					}
+					break;
+
+				case "addLogin":
+					String personId = request.getParameter("personId");
+					password = request.getParameter("password");
+					Login loginForPerson = facade.findLoginByPersonId(personId);
+
+					if (loginForPerson == null) {
+						Person person = facade.findPersonByPersonId(personId);
+						loginForPerson = new Login();
+						loginForPerson.setPerson(person);
+						loginForPerson.setPassword(password);
+						facade.createLogin(loginForPerson);
+						request.setAttribute("responseMessage", "SUCCESS: Login created");
+					} else {
+						loginForPerson.setPassword(password);
+						facade.updateLogin(loginForPerson);
+						request.setAttribute("responseMessage", "SUCCESS: Login updated");
+					}
+					break;
+
+				// ROLE
+				case "addRole":
+					Role role = new Role();
+					role.setName(request.getParameter("roleName"));
+					facade.createRole(role);
+					request.setAttribute("responseMessage", "SUCCESS: Role created");
+					break;
 				}
-				break;
-				
-			case "addLogin":
-				personId = request.getParameter("personId");
-				password = request.getParameter("password");
-				Login loginForPerson = facade.findLoginByPersonId(personId);
-				
-				if (loginForPerson == null) {
-					Person person = facade.findPersonByPersonId(personId);
-					loginForPerson = new Login();
-					loginForPerson.setPerson(person);
-					loginForPerson.setPassword(password);
-					facade.createLogin(loginForPerson);
-					request.setAttribute("responseMessage", "SUCCESS: Login created");
-				} else {
-					loginForPerson.setPassword(password);
-					facade.updateLogin(loginForPerson);
-					request.setAttribute("responseMessage", "SUCCESS: Login updated");
-				}
-				break;
-				
-			// PERSON
-			case "addPerson":
-				Person person = new Person();
-				person.setId(request.getParameter("personId"));
-				person.setName(request.getParameter("personName"));
-				person.setEmail(request.getParameter("personEmail"));
-				person.setPhoneNbr(request.getParameter("personPhoneNbr"));
-				
-				Role personRole = facade.findRoleByRoleName(request.getParameter("roleName"));
-				person.setRole(personRole);
-				facade.createPerson(person);
-				request.setAttribute("responseMessage", "SUCCESS: Person created");
-				break;
-				
-			// ROLE
-			case "addRole":
-				role = new Role();
-				role.setName(request.getParameter("roleName"));
-				facade.createRole(role);
-				request.setAttribute("responseMessage", "SUCCESS: Role created");
-				break;
 			}
 
 			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
@@ -242,6 +204,52 @@ public class T4AdminServlet extends HttpServlet {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	private enum Mode {
+		UPDATE, CREATE, DELETE
+	}
+	
+	private Person handlePersonModification(HttpServletRequest request, Mode mode) {
+
+		String personId = request.getParameter("personId");
+		if (mode == Mode.DELETE) {
+			this.facade.deletePerson(personId);
+		} else {
+			Person person = new Person();
+			person.setId(personId);
+			person.setName(request.getParameter("personName"));
+			person.setEmail(request.getParameter("personEmail"));
+			person.setPhoneNbr(request.getParameter("personPhoneNbr"));
+			
+			System.out.println("****: " + personId);
+
+			String roleName = request.getParameter("roleName");
+			if (roleName != null) {
+				Role role = facade.findRoleByRoleName(roleName);
+				person.setRole(role);
+			}
+
+			if (mode == Mode.UPDATE) {
+				return this.facade.updatePerson(person);
+			} else if (mode == Mode.CREATE) {
+				return this.facade.createPerson(person);
+			}
+		}
+		return null;
+	}
+
+	private String fillRequestWithPersonInfoAndReturnUrl(Person person, HttpServletRequest request) {
+		
+		if (person != null) {
+			request.setAttribute("personSubject", person);
+			request.setAttribute("editing", true);
+		} else {
+			request.setAttribute("editing", false);
+		}
+		request.setAttribute("allRoles", facade.findAllRoles());
+		String url = "/PersonEditor.jsp";
+		return url;
 	}
 
 }
