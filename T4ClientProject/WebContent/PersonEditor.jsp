@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Person editor</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -41,7 +41,7 @@
 		<h3 class="form-heading">${editing ? "Edit" : "Create"} Person</h3>
 		
 		<label>Id:</label><br>
-		<input name="personId" class="form-control" type=text value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
+		<input name="personId" class="form-control" type=text required oninvalid="this.setCustomValidity('ID is required')" value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
 		
 		<label>Name:</label><br>
 		<input name="personName" class="form-control" type=text value="${personSubject.getName()}"><br>

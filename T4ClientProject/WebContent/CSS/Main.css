@@ -1,0 +1,4 @@
+table tr td:last-child {
+	white-space: nowrap;
+	width: 10%;
+}
