@@ -1,3 +1,5 @@
-$(document).on("show.bs.modal", "#myModal", function (e) {
-    $(this).find('.modal-body').html('Fired By: ' + e.relatedTarget.id);
+$(document).on("show.bs.modal", "#personFormModal", function (e) {
+	console.log(e);
+	//$(request).find("")
+    //$(this).find('.modal-body').html('Fired By: ' + e.relatedTarget.id);
 });

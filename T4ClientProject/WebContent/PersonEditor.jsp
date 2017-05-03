@@ -7,13 +7,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body style="background: white;">
-	<jsp:include page="Header.jsp" />
-	<h2>${editing ? "Edit" : "Create"} Person</h2>
-				
+		<jsp:include page="Header.jsp"></jsp:include>		
 		<% 
 			// Person
 			Object personObj = request.getAttribute("personSubject");
@@ -34,23 +35,25 @@
 			request.setAttribute("loginSubject", l);
 			
 		%>
+	
+	<div class="container">
+	<form class="form-group" action="/T4ClientProject/T4AdminServlet" method="post">
+		<h3 class="form-heading">${editing ? "Edit" : "Create"} Person</h3>
 		
-	<form action="/T4ClientProject/T4AdminServlet" method="post">
-				
 		<label>Id:</label><br>
-		<input name="personId" type=text value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
+		<input name="personId" class="form-control" type=text value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
 		
 		<label>Name:</label><br>
-		<input name="personName" type=text value="${personSubject.getName()}"><br>
+		<input name="personName" class="form-control" type=text value="${personSubject.getName()}"><br>
 		
 		<label>Email:</label><br>
-		<input name="personEmail" type=text value="${personSubject.getEmail()}"><br>
+		<input name="personEmail" class="form-control" type=text value="${personSubject.getEmail()}"><br>
 		
 		<label>Phone Number:</label><br>
-		<input name="personPhoneNbr" type=text value="${personSubject.getPhoneNbr()}"><br>
+		<input name="personPhoneNbr" class="form-control" type=text value="${personSubject.getPhoneNbr()}"><br>
 		
 		<label>Role</label> <br> 
-		<select name="roleName">
+		<select name="roleName" class="form-control" >
 			<option value=null selected></option>
 			<c:forEach items="${allRoles}" var="role">
 				<option value="${role.getName()}"
@@ -60,52 +63,54 @@
 		</select> 
 		<br> 
 		
-		<input type="submit" name=${editing ? "updatePerson" : "createPerson" } value="Save" />
+		<input class="btn btn-primary" type="submit" name=${editing ? "updatePerson" : "createPerson" } value="Save" />
 		<div style="display:${editing ? 'inline' : 'none'}">
-			<input type="submit" name="deletePerson" value="Delete" />
+			<input class="btn btn-danger" type="submit" name="deletePerson" value="Delete" />
 		</div>
 		<input name="operation" value="personModification" type="hidden"/>
 
 	</form>
+	
 	<!-- *********************** -->
 	<hr>
 	<!-- *********************** -->
 	
 	<div id="loginArea" style="display:${ editing ? 'block' : 'none' }">
-		<form action="/T4ClientProject/T4AdminServlet" method="post">
+		<form class="form-group" action="/T4ClientProject/T4AdminServlet" method="post">
 
-			<h2>Login credentials</h2>
+			<h4 class="form-heading">Login credentials</h4>
 			
-			<label>Username</label>
-			<br>
-				<input name="personId" type=text readonly style="background: lightgray;" value="${ personSubject.getId() }" />
+			<label>Username</label><br>
+			<input class="form-control" name="personId" type=text readonly style="background: lightgray;" value="${ personSubject.getId() }" />
 						<br>			
 			<label>Current password</label>
 			<br>
-			<input type=password readonly value="${ loginSubject.getPassword() }">
+			<input class="form-control" type=password readonly value="${ loginSubject.getPassword() }">
 			<br>			
 			<label>New password</label>
 			<br>
-			<input name="password" type=password>
+			<input class="form-control" name="password" type=password>
 			<br>
 			<label>Confirm password</label>
 			<br>
-			<input name="confirmPassword" type=password>
+			<input class="form-control" name="confirmPassword" type=password>
 			<br>
 			
-			<input type="submit" name=${loginExists ? "updateLogin" : "createLogin" } value="Save" />
+			<input class="btn btn-primary" type="submit" name=${loginExists ? "updateLogin" : "createLogin" } value="Save" />
 			<div style="display:${loginExists ? 'inline' : 'none'}">
-				<input type="submit" name="deleteLogin" value="Delete" />
+				<input class="btn btn-danger" type="submit" name="deleteLogin" value="Delete" />
 			</div>
 			<input name="operation" value="loginModification" type="hidden"/>
 		
 		</form>
 	</div>
 
-	<form action="/T4ClientProject/T4AdminServlet" method="post">
-		<input class="btn" type="submit" value="Go back"/>
-		<input name="operation" value="goToEditorSelectorPage" type="hidden"/>
-	</form>
-
+	<div class="m-t-2">
+		<form action="/T4ClientProject/T4AdminServlet" method="post">
+			<input class="btn btn-secondary" type="submit" value="Go back"/>
+			<input name="operation" value="goToEditorSelectorPage" type="hidden"/>
+		</form>
+	</div>
+	</div>
 </body>
 </html>

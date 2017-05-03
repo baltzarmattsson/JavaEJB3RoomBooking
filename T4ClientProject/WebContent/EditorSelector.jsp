@@ -33,10 +33,14 @@
 </head>
 <body style="background: white;">
 	<jsp:include page="Header.jsp" />
+	
 	<div class="container">
+	
+	<ul class="list-inline">
+	
 		<div class="row">
-			<div class="col-md-12">
-				<h4>Choose person</h4>
+			<div id="personEditorArea" class="col-md-12">
+				<h3>Choose person</h3>
 				<div class="table-responsive">
 					
 	<table id="persontable" class="table table-bordered table-striped m-t-5">
@@ -48,7 +52,6 @@
 		<th>Phone number</th>
 		<th>Role</th>
 		<th>Edit</th>
-		<th>Delete</th>
 	</thead>
 	<tbody>
 		<c:forEach items="${allPersons}" var="person">
@@ -58,44 +61,29 @@
 				<td>${person.getEmail()}</td>
 				<td>${person.getPhoneNbr()}</td>
 				<td>${person.getRole() == null ? "" : person.getRole().getName()}</td>
-				<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button id="${person.getId()}"  class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-				<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span></button></p></td>	
-			</tr>
+				<td>
+					<form action="/T4ClientProject/T4AdminServlet" method="post">
+						<p data-placement="top" data-toggle="tooltip" title="Edit">
+						<button class="btn btn-primary" type="submit" name="editing"><span class="glyphicon glyphicon-pencil"></span></button>
+						<input name="selectedPerson" value="${person.getId()}" type="hidden" />
+						<input name="operation" value="goToPersonEditPage" type="hidden" />
+					</form>
+				</tr>
 		</c:forEach>
 	</tbody>
 	</table>
-					
+		<form action="/T4ClientProject/T4AdminServlet" method="post">
+			<input class="btn btn-success" name="creating" type=submit value="Create new person" />
+			<input name="operation" value="goToPersonEditPage" type="hidden" />
+		</form>
 				</div>
 			</div>	
 		</div>
+		
+		</ul>
 	</div>
 	
-	<!-- Trigger the modal with a button -->
-<button type="button" id="bubbbntotn" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-	
-	
-	
 	
 	
 	
@@ -106,22 +94,7 @@
 	<input name="editorSelector" id="radiobtnRole" type=radio value="role" onclick="handleRadioClick(this.id);">Role
 	<br>
 	<br>
-	
-	<div id="personEditorArea" style="display: none;">
-		<form action="/T4ClientProject/T4AdminServlet" method="post">
-			<select name="selectedPerson">
-				<c:forEach items="${allPersons}" var="person">
-					<option value="${person.getId()}">Id: "${person.getId()}", Name: "${person.getName()}", Role: "${person.getRole()}"</option>
-				</c:forEach>
-			</select>
-			
-			<input class="btn" name="editing" type=submit value="Edit selected person" />
-			<input class="btn" name="creating" type=submit value="Create new person" />
-			<input name="operation" value="goToPersonEditPage" type="hidden" />
-		</form>
-		<br>
-	</div>
-	
+		
 	<div id="roleEditorArea" style="display: none;">
 	<form action="/T4ClientProject/T4AdminServlet" method="post">
 			<select name="selectedRole">

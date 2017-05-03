@@ -194,7 +194,8 @@ public class T4AdminServlet extends HttpServlet {
 				
 				case "goToEditorSelectorPage":
 					url = "/EditorSelector.jsp";
-					request.setAttribute("allPersons", facade.findAllPersons());	
+					
+					request.setAttribute("allPersons",facade.findAllPersons());
 					request.setAttribute("allRoles", facade.findAllRoles());					
 					break;
 					
