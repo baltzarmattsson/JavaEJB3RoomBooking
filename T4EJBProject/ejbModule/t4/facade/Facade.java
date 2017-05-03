@@ -1,9 +1,11 @@
 package t4.facade;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.validation.ConstraintViolationException;
 
 import t4.eao.LoginEAOLocal;
 import t4.eao.PersonEAOLocal;

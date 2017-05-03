@@ -1,8 +1,10 @@
 package t4.facade;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.ejb.Local;
+import javax.validation.ConstraintViolationException;
 
 import t4.entities.Login;
 import t4.entities.Person;

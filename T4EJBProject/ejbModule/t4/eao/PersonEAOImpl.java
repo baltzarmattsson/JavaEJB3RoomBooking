@@ -1,11 +1,13 @@
 package t4.eao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolationException;
 
 import t4.entities.Person;
 
@@ -33,6 +35,7 @@ public class PersonEAOImpl implements PersonEAOLocal {
 	public Person createPerson(Person person) {
 		System.out.println("testcreate");
 		em.persist(person);
+		em.flush();
 		return person;
 	}
 
