@@ -1,4 +1,3 @@
-<%@page import="java.util.ArrayList"%>
 <%@page import="t4.entities.Role"%>
 <%@page import="t4.entities.Person"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

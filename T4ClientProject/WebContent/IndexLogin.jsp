@@ -15,7 +15,7 @@
   <div class="wrapper">
     <form class="form-signin" action="/T4ClientProject/T4AdminServlet" method="post">       
       <h2 class="form-signin-heading">Admin login</h2>
-	<p style="display:${responseLabel != null ? 'inline' : 'none'}">${responseLabel}</p>
+	  <p style="display:${responseLabel != null ? 'inline' : 'none'}">${responseLabel}</p>
       <input type="text" class="form-control" name="username" placeholder="Admin username" required autofocus="" />
       <input type="password" class="form-control" name="password" placeholder="Password" required/>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
