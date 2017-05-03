@@ -31,7 +31,7 @@
 		<h3 class="form-heading">${editing ? "Edit" : "Create"} Role</h3>
 		
 		<label>Name:</label><br>
-		<input class="form-control" name="roleName" type=text required oninvalid="this.setCustomValidity('Name is required')" value="${roleSubject.getName()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
+		<input class="form-control" name="roleName" type=text required value="${roleSubject.getName()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
 
 		<input class="btn btn-primary" type="submit" name=${editing ? "" : "createRole" } ${ editing ? 'disabled' : ''} value="Save" />
 		<div style="display:${editing ? 'inline' : 'none'}">

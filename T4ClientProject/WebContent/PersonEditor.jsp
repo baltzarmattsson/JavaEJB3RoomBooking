@@ -41,7 +41,7 @@
 		<h3 class="form-heading">${editing ? "Edit" : "Create"} Person</h3>
 		
 		<label>Id:</label><br>
-		<input name="personId" class="form-control" type=text required oninvalid="this.setCustomValidity('ID is required')" value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
+		<input name="personId" class="form-control" type=text required value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
 		
 		<label>Name:</label><br>
 		<input name="personName" class="form-control" type=text value="${personSubject.getName()}"><br>

@@ -2,6 +2,7 @@ package t4.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,90 +33,13 @@ public class T4AdminServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String url = null;
-		try {
-			String operation = request.getParameter("operation");
-			
-			switch (operation) {
-			case "getAllLogins": 
-				ArrayList<Login> allLogins = this.facade.findAllLogins();
-				request.setAttribute("allLogins", allLogins);
-				break;
-			case "getLogin":
-				String personAndLoginId = request.getParameter("personAndLoginId");
-				Login login = this.facade.findLoginByPersonId(personAndLoginId);
-				
-				if (login != null) {
-					request.setAttribute("login", login);
-					
-				} else {
-					request.setAttribute("responseLabel", "INFO: Login not found");
-				}
-				break;
-			
-			case "getAllRoles":
-				ArrayList<Role> allRoles = this.facade.findAllRoles();
-				request.setAttribute("allRoles", allRoles);
-				break;
-			case "getRole":
-				String roleId = request.getParameter("roleId");
-				Role role = this.facade.findRoleByRoleName(roleId);
-						
-				if (role != null) {
-					request.setAttribute("role", role);
-					
-				} else {
-					request.setAttribute("responseLabel", "INFO: Role not found");
-				}
-				break;
-			case "getAllPersons":
-				ArrayList<Person> allPersons = this.facade.findAllPersons();
-				request.setAttribute("allPersons", allPersons);
-				break;
-			case "getPerson":
-				String personId = request.getParameter("personId");
-				Person person = this.facade.findPersonByPersonId(personId);
-				
-				if (person != null) {
-					request.setAttribute("person", person);
-					
-				} else {
-					request.setAttribute("responseLabel", "INFO: Person not found");
-				}
-				break;
-			case "createNewPerson":
-				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("editing", false);
-				request.setAttribute("test", "test");
-				url = "/EditorSelector.jsp";
-				break;
-				
-			case "editPerson":
-				personId = request.getParameter("personId");
-				Person p = this.facade.findPersonByPersonId(personId);
 
-				request.setAttribute("test", "test");
-				request.setAttribute("allRoles", this.facade.findAllRoles());
-				request.setAttribute("personToEdit", p);
-				request.setAttribute("editing", true);
-				url = "/EditorSelector.jsp";
-				break;
-			}
-			
-		} catch (Exception e) {
-			
-		}
 	}
-	
-
-//	<input name="operation" value=${ editing ? "updateExistingPerson" : "saveNewPerson" } type="hidden"/>
-	
+		
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String url = null;
 		
-		try {
 			String operation = request.getParameter("operation");
 
 			// UPDATE/DELETE/CREATE Person
@@ -129,8 +53,12 @@ public class T4AdminServlet extends HttpServlet {
 				} else if (request.getParameter("createPerson") != null) {
 					mode = Mode.CREATE;
 				}
-				Person person = this.handlePersonModification(request, mode);
-				url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
+				try {
+					Person person = this.handlePersonModification(request, mode);
+					url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
+				} catch (SQLException sqle) {
+					this.handleSqlException(sqle);
+				}
 				
 			// DELETE/CREATE ROLE
 			} else if (operation.equals("roleModification")) {
@@ -246,16 +174,43 @@ public class T4AdminServlet extends HttpServlet {
 
 			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
 			rd.forward(request, response);
-		} catch (Exception e) {
-			throw e;
-		}
 	}
 	
 	private enum Mode {
 		UPDATE, CREATE, DELETE
 	}
 	
-	private Person handlePersonModification(HttpServletRequest request, Mode mode) {
+	private enum EditType {
+		PERSON, ROLE
+	}
+	
+	private void handleSqlException(SQLException sqle, EditType editType) {
+		String message = null;
+		String subject = editType == EditType.PERSON ? "person" : "role";
+		String identifyingAttribute = editType == EditType.PERSON ? "id" : "name";
+        switch (sqle.getErrorCode())
+        {
+            case PrimaryKey:
+                message = "There's already a " + subject + " with that " + identifyingAttribute + ", please choose another value.";
+                break;
+            case ForeignKey:
+                message = "Could not find a role with that name, please try again";
+                break;
+            case DataWouldBeTruncated:
+                message = "A value is too long, please try again";
+                break;
+            case SomethingIsNull:
+            	message = "A required field is empty, please try again";
+                break;
+        }
+	}
+	
+	private static final int PrimaryKey = 2627;
+	private static final int ForeignKey = 547;
+	private static final int DataWouldBeTruncated = 8152;
+	private static final int SomethingIsNull = 515;
+
+	private Person handlePersonModification(HttpServletRequest request, Mode mode) throws SQLException {
 
 		String personId = request.getParameter("personId");
 		if (personId != null) {
@@ -312,7 +267,7 @@ public class T4AdminServlet extends HttpServlet {
 		return url;
 	}
 	
-	private Role handleRoleModification(HttpServletRequest request, Mode mode) {
+	private Role handleRoleModification(HttpServletRequest request, Mode mode) throws SQLException {
 
 		String roleName = request.getParameter("roleName");
 		if (roleName != null) {
