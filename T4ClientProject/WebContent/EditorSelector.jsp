@@ -3,13 +3,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 
-<script type="text/javascript">
+<script>
 	function handleRadioClick(id) {
 		console.log(id);
 		if (id == "radiobtnPerson") {
@@ -21,11 +23,60 @@
 		}
 	}
 	
-	window.onload = this.handleRadioClick("personEditorArea");
+	window.onload = function() {
+		this.handleRadioClick("radiobtnPerson");
+		document.getElementById("radiobtnPerson").checked = true;
+	}
 	
 </script>
 </head>
 <body style="background: white;">
+	<jsp:include page="Header.jsp" />
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h4>Choose person</h4>
+				<div class="table-responsive">
+					
+	<table id="persontable" class="table table-bordered table-striped m-t-5">
+	<thead>
+	
+		<th>Id</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th>Phone number</th>
+		<th>Role</th>
+		<th>Edit</th>
+		<th>Delete</th>
+	</thead>
+	<tbody>
+		<c:forEach items="${allPersons}" var="person">
+			<tr>
+				<td>${person.getId()}</td>
+				<td>${person.getName()}</td>
+				<td>${person.getEmail()}</td>
+				<td>${person.getPhoneNbr()}</td>
+				<td>${person.getRole() == null ? "" : person.getRole().getName()}</td>
+				<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+				<td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"><span class="glyphicon glyphicon-trash"></span></button></p></td>	
+			</tr>
+		</c:forEach>
+	</tbody>
+	</table>
+					
+				</div>
+			</div>	
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<h2>Choose editor</h2>
 	<input name="editorSelector" id="radiobtnPerson" type=radio value="person" onclick="handleRadioClick(this.id);">Person and login
 	<br>
