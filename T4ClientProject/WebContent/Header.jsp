@@ -11,14 +11,23 @@
 	<link rel="stylesheet" href="CSS/Main.css">
 	<link rel="stylesheet" href="CSS/Header.css">
 </head>
-<body>	
-	<div class="container">
+<body>
+	
 	<div class="table-responsive">
-		<table class="table table-borderless">
+		<table class="table table-borderless" style="border-bottom: 1px solid black;">
 		<thead><th></th><th></th></thead>
 		<tbody>
 		<tr>
+		<!-- Logo -->
+		<td>
+			<img alt="DIBS Logo" src="logo.png" style="width:150px;height:fill;">
+		</td>
+		<td></td>
+		</tr>
+		<tr>
 		<form action="/T4ClientProject/T4AdminServlet" method="post" >
+		
+		
 		<td>
 		<!-- Home/About/Test -->
 			<button class="btn btn-secondary" type="submit" name="goToHomePage">Home</button>
@@ -37,10 +46,7 @@
 		</tbody>
 		</table>
 	</div>
-	</div>
 	
-
-	HOME ABOUT TEST
 	<p style="display:${errorMessage != null ? 'inline' : 'none'}">${errorMessage}</p>
 </body>
 </html>

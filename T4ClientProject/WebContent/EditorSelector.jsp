@@ -13,9 +13,9 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body style="background: white;">
-	<jsp:include page="Header.jsp" />
 	
 	<div class="container">
+	<jsp:include page="Header.jsp" />
 	<ul class="nav nav-pills">
 		<li class="active"><a data-toggle="pill" href="#personEditorArea">Edit persons and logins</a></li>
 		<li><a data-toggle="pill" href="#roleEditorArea">Edit roles</a></li>
@@ -95,7 +95,6 @@
 					<input name="operation" value="goToRoleEditPage" type="hidden" />
 				</form>
 				<form action="/T4ClientProject/T4AdminServlet" method="post">
-					<input class="btn btn-danger" type="submit" value="holy f-"/>
 					<input name="operation" value="goToAboutPage" type="hidden" />
 				</form>
 			</div>

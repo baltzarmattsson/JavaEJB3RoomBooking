@@ -13,8 +13,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body style="background: white;">
-		<jsp:include page="Header.jsp"></jsp:include>		
+<body style="background: white;">	
 		<% 
 			// Person
 			Object personObj = request.getAttribute("personSubject");
@@ -37,6 +36,7 @@
 		%>
 	
 	<div class="container">
+	<jsp:include page="Header.jsp" />
 	<form class="form-group" action="/T4ClientProject/T4AdminServlet" method="post">
 		<h3 class="form-heading">${editing ? "Edit" : "Create"} Person</h3>
 		
