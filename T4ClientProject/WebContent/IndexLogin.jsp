@@ -16,8 +16,14 @@
     <form class="form-signin" action="/T4ClientProject/T4AdminServlet" method="post">       
       <h2 class="form-signin-heading">Admin login</h2>
 	  <p style="display:${responseLabel != null ? 'inline' : 'none'}">${responseLabel}</p>
-      <input type="text" class="form-control" name="username" placeholder="Admin username" required autofocus="" />
-      <input type="password" class="form-control" name="password" placeholder="Password" required/>
+      <input type="text" class="form-control" name="username" placeholder="Admin username" required	autofocus
+   			oninvalid="this.setCustomValidity('Username required')"
+   			oninput="this.setCustomValidity('')" />
+      
+      <input type="password" class="form-control" name="password" placeholder="Password" required
+      		oninvalid="this.setCustomValidity('Password required')"
+      		oninput="this.setCustomValidity('')" />
+      		
       <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
       <input name="operation" value="loginUser"	type="hidden" />   
     </form>

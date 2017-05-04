@@ -41,16 +41,19 @@
 		<h3 class="form-heading">${editing ? "Edit" : "Create"} Person</h3>
 		
 		<label>Id:</label><br>
-		<input name="personId" class="form-control" type=text required value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }><br>
+		<input name="personId" class="form-control" type=text required value="${personSubject.getId()}" ${ editing ? "readonly style='background: lightgray;'"  : "" }
+				oninvalid="this.setCustomValidity('ID required')"
+				oninput="this.setCustomValidity('')"
+		/><br>
 		
 		<label>Name:</label><br>
-		<input name="personName" class="form-control" type=text value="${personSubject.getName()}"><br>
+		<input name="personName" class="form-control" type=text value="${personSubject.getName()}"/><br>
 		
 		<label>Email:</label><br>
-		<input name="personEmail" class="form-control" type=text value="${personSubject.getEmail()}"><br>
+		<input name="personEmail" class="form-control" type=text value="${personSubject.getEmail()}"/><br>
 		
 		<label>Phone Number:</label><br>
-		<input name="personPhoneNbr" class="form-control" type=text value="${personSubject.getPhoneNbr()}"><br>
+		<input name="personPhoneNbr" class="form-control" type=text value="${personSubject.getPhoneNbr()}"/><br>
 		
 		<label>Role</label> <br> 
 		<select name="roleName" class="form-control" >
@@ -76,7 +79,7 @@
 	<!-- *********************** -->
 	
 	<div id="loginArea" style="display:${ editing ? 'block' : 'none' }">
-		<form class="form-group" action="/T4ClientProject/T4AdminServlet" method="post">
+		<form id="loginForm" class="form-group" action="/T4ClientProject/T4AdminServlet" method="post">
 
 			<h4 class="form-heading">Login credentials</h4>
 			
@@ -85,16 +88,21 @@
 						<br>			
 			<label>Current password</label>
 			<br>
-			<input class="form-control" type=password readonly value="${ loginSubject.getPassword() }">
+			<input class="form-control" id="password" type=password readonly value="${ loginSubject.getPassword() }">
 			<br>			
 			<label>New password</label>
 			<br>
-			<input class="form-control" name="password" type=password>
-			<br>
+			<input class="form-control" id="confirmPassword" name="password" type=password required 
+					oninvalid="this.setCustomValidity('Password required')"
+					oninput="this.setCustomValidity('')"
+			/><br>
+			
 			<label>Confirm password</label>
 			<br>
-			<input class="form-control" name="confirmPassword" type=password>
-			<br>
+			<input class="form-control" name="confirmPassword" type=password required
+					oninvalid="this.setCustomValidity('Password required')"
+					oninput="this.setCustomValidity('')"
+			/><br>
 			
 			<input class="btn btn-primary" type="submit" name=${loginExists ? "updateLogin" : "createLogin" } value="Save" />
 			<div style="display:${loginExists ? 'inline' : 'none'}">
