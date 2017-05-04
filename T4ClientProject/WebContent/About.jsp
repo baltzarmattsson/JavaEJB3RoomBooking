@@ -15,7 +15,7 @@
 	<jsp:include page="Header.jsp" />
 	
 	
-	<h1>About us</h1>
+	<h3>About us</h3>
 	<p>Welcome,</p>
 
 		<p> We are Baltzar, Eric and Ebba. Three Informatics students from the University of Lund. 

@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="C:/Users/Baltzar/T4/T4ClientProject/jars/junit3.8.2.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/T4EJBProject"/>
 	<classpathentry kind="lib" path="C:/Users/Baltzar/T4/T4ClientProject/jars/junitee1.11.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

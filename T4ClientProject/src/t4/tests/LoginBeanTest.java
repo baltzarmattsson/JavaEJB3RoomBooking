@@ -3,6 +3,8 @@ package t4.tests;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.junit.Test;
+
 import t4.eao.LoginEAOLocal;
 import t4.eao.PersonEAOLocal;
 import t4.entities.Person;
@@ -21,14 +23,20 @@ public class LoginBeanTest extends TestCase {
 		super.setUp();
 		Context context = new InitialContext();
 		loginEAO = (LoginEAOLocal) context.lookup("java:app/T4EJBProject/LoginEAOImpl!t4.eao.LoginEAOLocal");
-		personEAO = (PersonEAOLocal) context.lookup("java:global/T4EAR/T4EJBProject/PersonEAOImpl!t4.eao.PersonEAOLocal");
+		personEAO = (PersonEAOLocal) context.lookup("java:app/T4EJBProject/PersonEAOImpl!t4.eao.PersonEAOLocal");
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		loginEAO = null;
 	}
+	
+	@Test
+	public void test() throws Exception {
+		assertEquals("javaSucksDick", "javaSucksDick");
+	}
 
+	@Test
 	public void testLoginMethodPerson() throws Exception {
 		
 		Person p = new Person();
@@ -41,6 +49,7 @@ public class LoginBeanTest extends TestCase {
 		assertEquals(login.getPerson().getId(), "SYSA16aa");
 	}
 	
+	@Test
 	public void testLoginMethodPassword() throws Exception {
 		Login login = new Login();
 		login.setPassword("Lund123");
@@ -48,6 +57,7 @@ public class LoginBeanTest extends TestCase {
 		
 	}
 
+	@Test
 	public void testCreateLogin() throws Exception {
 		
 		Person p = new Person();
@@ -62,12 +72,14 @@ public class LoginBeanTest extends TestCase {
 		
 		this.loginEAO.createLogin(login);
 	}
-	
+
+	@Test
 	public void testFindLogin() throws Exception {
 		Login login = this.loginEAO.findLoginByPersonId("testSubject");
 		assertNotNull(login);
 	}
-	
+
+	@Test
 	public void testDeleteAnimal() {
 		this.loginEAO.deleteLogin("testSubject");
 		Login login = this.loginEAO.findLoginByPersonId("testSubject");
