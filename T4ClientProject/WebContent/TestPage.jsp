@@ -13,9 +13,21 @@
 <body>
 	<div class="container">
 	<jsp:include page="Header.jsp" />
-	
-	
-	TEST 
+	<h>Testing</h>
+		<p> Please choose one of the following tests:<br></p>
+		<form action="TestServlet" method="get" name="SelectTest">
+			<select>
+				<option value="t4.tests.PersonBeanTest">
+				t4.tests.PersonBeanTest</option>
+				<option value="t4.tests.RoleBeanTest">
+				t4.tests.RoleBeanTest</option>
+				<option value="t4.tests.LoginBeanTest">
+				t4.tests.LoginBeanTest</option>
+			</select>
+			<div>
+			<input class="btn" name="RunTestBean" type=submit value="Run" />
+			</div>
+		</form>
 	</div>
 
 </body>

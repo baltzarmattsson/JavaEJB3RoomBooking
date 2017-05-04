@@ -13,10 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/T4EJBProject"/>
 	<classpathentry kind="lib" path="C:/Users/Baltzar/T4/T4ClientProject/jars/junit3.8.2.jar"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/T4EJBProject"/>
+	<classpathentry kind="lib" path="C:/Users/Baltzar/T4/T4ClientProject/jars/junitee1.11.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

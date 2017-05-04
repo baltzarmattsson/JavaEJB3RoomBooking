@@ -8,5 +8,13 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list> 
+  <servlet>
+ <servlet-name>JUnitEETestServlet</servlet-name>
+ <servlet-class>org.junitee.servlet.JUnitEEServlet</servlet-class>
+ </servlet>
+ <servlet-mapping>
+ <servlet-name>JUnitEETestServlet</servlet-name>
+ <url-pattern>/TestServlet/*</url-pattern>
+</servlet-mapping>
 </web-app>

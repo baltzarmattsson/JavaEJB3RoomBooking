@@ -20,9 +20,8 @@ public class LoginBeanTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		Context context = new InitialContext();
-//		login = (LoginEAOLocal) context.lookup("java:app/StatefulEJBProject/Login!examples.ejb.basic.stateful.LoginLocal");
-		loginEAO = (LoginEAOLocal) context.lookup("java:app/T4EJBProject/Login!t4.eao.LoginEAOLocal");
-		personEAO = (PersonEAOLocal) context.lookup("java:app/T4EJBProject/Person!t4.eao.PersonEAOLocal");
+		loginEAO = (LoginEAOLocal) context.lookup("java:app/T4EJBProject/LoginEAOImpl!t4.eao.LoginEAOLocal");
+		personEAO = (PersonEAOLocal) context.lookup("java:global/T4EAR/T4EJBProject/PersonEAOImpl!t4.eao.PersonEAOLocal");
 	}
 
 	protected void tearDown() throws Exception {

@@ -15,7 +15,13 @@
 	<jsp:include page="Header.jsp" />
 	
 	
-	ABOUT
+	<h1>About us</h1>
+	<p>Welcome,</p>
+
+		<p> We are Baltzar, Eric and Ebba. Three Informatics students from the University of Lund. 
+		This semester we have been given an assignment to create an Information system. Due to the lack of a concrete booking system for our faculty, 
+		we decided to gather our knowledge and create a new system called Dibs. A system where students, teachers and administrators are able to book a classroom, a group room or a lecture hall. 
+		We believe that this system will contribute to an increase in academic results, social cohesion and facilitate the needs of students and teachers.</p>
 	</div>
 
 </body>
