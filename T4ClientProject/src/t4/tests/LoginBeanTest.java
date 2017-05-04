@@ -31,10 +31,6 @@ public class LoginBeanTest extends TestCase {
 		loginEAO = null;
 	}
 	
-	@Test
-	public void test() throws Exception {
-		assertEquals("javaSucksDick", "javaSucksDick");
-	}
 
 	@Test
 	public void testLoginMethodPerson() throws Exception {

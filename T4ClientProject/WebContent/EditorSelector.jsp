@@ -6,24 +6,23 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Editor selector</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="CSS/Main.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body style="background: white;">
+<body>
 	
 	<div class="container">
 	<jsp:include page="Header.jsp" />
 	<h3>Choose editor</h3>
-	<ul class="nav nav-pills" style="margin-bottom: 15px;">
+	<ul class="nav nav-pills">
 		<li class="active"><a data-toggle="pill" href="#personEditorArea">Edit persons and logins</a></li>
 		<li><a data-toggle="pill" href="#roleEditorArea">Edit roles</a></li>
 	</ul>
-		
 	<div class="tab-content">
-	
+		
 		<div id="personEditorArea" class="tab-pane fade in active">
 			<div class="table-responsive">
 			<table id="persontable" class="table table-bordered table-striped">
@@ -36,6 +35,7 @@
 				<th>Edit</th>
 			</thead>
 			<tbody>
+			
 			<c:forEach items="${allPersons}" var="person">
 				<tr>
 					<td>${person.getId()}</td>
@@ -52,6 +52,7 @@
 								<input name="operation" value="goToPersonEditPage" type="hidden" />
 							</form>
 						</div>
+					</td>
 				</tr>
 			</c:forEach>
 			</tbody>
@@ -61,9 +62,8 @@
 					<input name="operation" value="goToPersonEditPage" type="hidden" />
 				</form>
 			</div>
-		</div>	
+		</div> 
 		
-				
 		<div id="roleEditorArea" class="tab-pane">
 			<div class="table-responsive">
 			<table id="roletable" class="table table-bordered table-striped">

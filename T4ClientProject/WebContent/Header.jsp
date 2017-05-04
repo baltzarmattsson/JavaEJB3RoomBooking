@@ -20,12 +20,12 @@
 		<tr>
 		<!-- Logo -->
 		<td>
-			<img alt="DIBS Logo" src="logo.png" style="width:150px;height:fill;">
+			<img alt="DIBS Logo" src="logo.png" style="width:150px;">
 		</td>
 		<td></td>
 		</tr>
-		<tr>
 		<form action="/T4ClientProject/T4AdminServlet" method="post" >
+		<tr>
 		
 		
 		<td>

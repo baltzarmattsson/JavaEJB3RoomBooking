@@ -117,13 +117,9 @@ public class T4AdminServlet extends HttpServlet {
 				this.handleLoginModification(request, mode);
 				Person person = this.facade.findPersonByPersonId(request.getParameter("personId"));
 				url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
-				// request.setAttribute("errorMessage", "Login " +
-				// mode.toString().toLowerCase() + "d!");
-
 			} else if (operation.equals("navbarClick")) {
 				if (request.getParameter("goToHomePage") != null) {
 					url = "/EditorSelector.jsp";
-
 					request.setAttribute("allPersons", facade.findAllPersons());
 					request.setAttribute("allRoles", facade.findAllRoles());
 				} else if (request.getParameter("goToAboutPage") != null) {
@@ -232,11 +228,6 @@ public class T4AdminServlet extends HttpServlet {
 		
         return message;
 	}
-	
-	private static final int PrimaryKey = 2627;
-	private static final int ForeignKey = 547;
-	private static final int DataWouldBeTruncated = 8152;
-	private static final int SomethingIsNull = 515;
 
 	private Person handlePersonModification(HttpServletRequest request, Mode mode) throws SQLException {
 
