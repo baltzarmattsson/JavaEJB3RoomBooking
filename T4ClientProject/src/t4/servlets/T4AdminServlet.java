@@ -61,17 +61,9 @@ public class T4AdminServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		String url = null;
-		System.out.println("test123");
-		String zxc = "";
-		String aaaa = "12;";
-		String hej = "hej";
 		String operation = request.getParameter("operation");
-		System.out.println("**OPERATION**: " + operation);
-		if (operation.equals("handleNavbarClick")) {
-			System.out.println("asd");
-		}
 		
-//		try {
+		try {
 			// UPDATE/DELETE/CREATE Person
 			if (operation.equals("personModification")) {
 
@@ -212,12 +204,12 @@ public class T4AdminServlet extends HttpServlet {
 			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
 			rd.forward(request, response);
 
-//		} catch (Exception e) {
-//			request.setAttribute("allPersons", facade.findAllPersons());
-//			request.setAttribute("allRoles", facade.findAllRoles());
-//			RequestDispatcher rd = getServletContext().getRequestDispatcher("/EditorSelector.jsp");
-//			rd.forward(request, response);
-//		}
+		} catch (Exception e) {
+			request.setAttribute("allPersons", facade.findAllPersons());
+			request.setAttribute("allRoles", facade.findAllRoles());
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/EditorSelector.jsp");
+			rd.forward(request, response);
+		}
 	}
 	
 	private enum Mode {
