@@ -11,7 +11,6 @@
 	<link rel="stylesheet" href="CSS/Main.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="scripts/editorselector.js"></script>
 </head>
 <body style="background: white;">
 	<jsp:include page="Header.jsp" />
@@ -94,6 +93,10 @@
 				<form action="/T4ClientProject/T4AdminServlet" method="post">
 					<input class="btn btn-success" name="creating" type=submit value="Create new role" />
 					<input name="operation" value="goToRoleEditPage" type="hidden" />
+				</form>
+				<form action="/T4ClientProject/T4AdminServlet" method="post">
+					<input class="btn btn-danger" type="submit" value="holy f-"/>
+					<input name="operation" value="goToAboutPage" type="hidden" />
 				</form>
 			</div>
 		</div>

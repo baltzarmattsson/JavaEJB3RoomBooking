@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
-import javafx.scene.chart.PieChart.Data;
 import t4.entities.Login;
 import t4.entities.Person;
 import t4.entities.Role;
@@ -35,137 +34,190 @@ public class T4AdminServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String operation = request.getParameter("operation");
+		String url = null;
+		
+		switch (operation) {
+		case "goToAboutPage":
+			url = "/About";
+			break;
+		
+		case "goToTestPage":
+			url = "/TestPage.jsp";
+			break;
+			
+		case "goToEditorSelectorPage":
+			url = "/EditorSelector.jsp";
+			request.setAttribute("allPersons", facade.findAllPersons());
+			request.setAttribute("allRoles", facade.findAllRoles());
+			break;
+		}
+		
+		RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
+		rd.forward(request, response);
 	}
 		
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		String url = null;
+		System.out.println("test123");
+		String zxc = "";
+		String aaaa = "12;";
+		String hej = "hej";
 		String operation = request.getParameter("operation");
+		System.out.println("**OPERATION**: " + operation);
+		if (operation.equals("handleNavbarClick")) {
+			System.out.println("asd");
+		}
+		
+//		try {
+			// UPDATE/DELETE/CREATE Person
+			if (operation.equals("personModification")) {
 
-		try {
-		// UPDATE/DELETE/CREATE Person
-		if (operation.equals("personModification")) {
+				Mode mode = null;
+				if (request.getParameter("deletePerson") != null) {
+					mode = Mode.DELETE;
+				} else if (request.getParameter("updatePerson") != null) {
+					mode = Mode.UPDATE;
+				} else if (request.getParameter("createPerson") != null) {
+					mode = Mode.CREATE;
+				}
+				try {
+					Person person = this.handlePersonModification(request, mode);
+					url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
+					request.setAttribute("errorMessage", "Person " + mode.toString().toLowerCase() + "d!");
+				} catch (Exception e) {
+					String errorMessage = this.handleConstraintViolationException(e, EditType.PERSON);
+					request.setAttribute("errorMessage", errorMessage);
+					url = "/PersonEditor.jsp";
+				}
 
-			Mode mode = null;
-			if (request.getParameter("deletePerson") != null) {
-				mode = Mode.DELETE;
-			} else if (request.getParameter("updatePerson") != null) {
-				mode = Mode.UPDATE;
-			} else if (request.getParameter("createPerson") != null) {
-				mode = Mode.CREATE;
-			}
-			try {
-				Person person = this.handlePersonModification(request, mode);
+				// DELETE/CREATE ROLE
+			} else if (operation.equals("roleModification")) {
+
+				Mode mode = null;
+				if (request.getParameter("deleteRole") != null) {
+					mode = Mode.DELETE;
+				} else if (request.getParameter("createRole") != null) {
+					mode = Mode.CREATE;
+				}
+				try {
+					Role role = this.handleRoleModification(request, mode);
+					url = this.fillRequestWithRoleInfoAndReturnUrl(role, request);
+					request.setAttribute("errorMessage", "Role " + mode.toString().toLowerCase() + "d!");
+				} catch (Exception e) {
+					String errorMessage = this.handleConstraintViolationException(e, EditType.ROLE);
+					request.setAttribute("errorMessage", errorMessage);
+					url = "/RoleEditor.jsp";
+				}
+				// DELETE/CREATE LOGIN
+			} else if (operation.equals("loginModification")) {
+
+				Mode mode = null;
+				if (request.getParameter("deleteLogin") != null) {
+					mode = Mode.DELETE;
+				} else if (request.getParameter("createLogin") != null) {
+					mode = Mode.CREATE;
+				} else if (request.getParameter("updateLogin") != null) {
+					mode = Mode.UPDATE;
+				}
+				this.handleLoginModification(request, mode);
+				Person person = this.facade.findPersonByPersonId(request.getParameter("personId"));
 				url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
-				request.setAttribute("errorMessage", "Person " + mode.toString().toLowerCase() + "d!");
-			} catch (Exception e) {
-				String errorMessage = this.handleConstraintViolationException(e, EditType.PERSON);
-				request.setAttribute("errorMessage", errorMessage);
-				url = "/PersonEditor.jsp";
-			}
+				// request.setAttribute("errorMessage", "Login " +
+				// mode.toString().toLowerCase() + "d!");
 
-		// DELETE/CREATE ROLE
-		} else if (operation.equals("roleModification")) {
-
-			Mode mode = null;
-			if (request.getParameter("deleteRole") != null) {
-				mode = Mode.DELETE;
-			} else if (request.getParameter("createRole") != null) {
-				mode = Mode.CREATE;
-			}
-			try {
-				Role role = this.handleRoleModification(request, mode);
-				url = this.fillRequestWithRoleInfoAndReturnUrl(role, request);
-				request.setAttribute("errorMessage", "Role " + mode.toString().toLowerCase() + "d!");
-			} catch (Exception e) {
-				String errorMessage = this.handleConstraintViolationException(e, EditType.ROLE);
-				request.setAttribute("errorMessage", errorMessage);
-				url = "/RoleEditor.jsp";
-			}
-		// DELETE/CREATE LOGIN
-		} else if (operation.equals("loginModification")) {
-
-			Mode mode = null;
-			if (request.getParameter("deleteLogin") != null) {
-				mode = Mode.DELETE;
-			} else if (request.getParameter("createLogin") != null) {
-				mode = Mode.CREATE;
-			} else if (request.getParameter("updateLogin") != null) {
-				mode = Mode.UPDATE;
-			}
-			this.handleLoginModification(request, mode);
-			Person person = this.facade.findPersonByPersonId(request.getParameter("personId"));
-			url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
-//			request.setAttribute("errorMessage", "Login " + mode.toString().toLowerCase() + "d!");
-
-		} else {
-			switch (operation) {
-
-			case "goToPersonEditPage":
-
-				boolean editing = request.getParameter("editing") != null;
-				request.setAttribute("editing", editing);
-
-				Person personSubject = null;
-				if (editing) {
-					String personId = request.getParameter("selectedPerson");
-					if (personId != null) {
-						personSubject = facade.findPersonByPersonId(personId);
-					}
-				}
-				url = this.fillRequestWithPersonInfoAndReturnUrl(personSubject, request);
-				break;
-
-			case "goToRoleEditPage":
-
-				editing = request.getParameter("editing") != null;
-				request.setAttribute("editing", editing);
-
-				Role roleSubject = null;
-				if (editing) {
-					String roleName = request.getParameter("selectedRole");
-					if (roleName != null) {
-						roleSubject = facade.findRoleByRoleName(roleName);
-					}
-				}
-				url = this.fillRequestWithRoleInfoAndReturnUrl(roleSubject, request);
-				break;
-
-			case "goToEditorSelectorPage":
-				url = "/EditorSelector.jsp";
-
-				request.setAttribute("allPersons", facade.findAllPersons());
-				request.setAttribute("allRoles", facade.findAllRoles());
-				break;
-
-			case "loginUser":
-				String username = request.getParameter("username");
-				String password = request.getParameter("password");
-				Login login = facade.findLoginByPersonId(username);
-				if (login != null && login.getPassword().equals(password)) {
+			} else if (operation.equals("navbarClick")) {
+				if (request.getParameter("goToHomePage") != null) {
 					url = "/EditorSelector.jsp";
-					request.setAttribute("loggedInUser", login.getPerson());
+
 					request.setAttribute("allPersons", facade.findAllPersons());
 					request.setAttribute("allRoles", facade.findAllRoles());
-				} else {
+				} else if (request.getParameter("goToAboutPage") != null) {
+					url = "/About.jsp";
+				} else if (request.getParameter("goToTestPage") != null) {
+					url = "/TestPage.jsp";
+				} else if (request.getParameter("logoutUser") != null) {
 					url = "/IndexLogin.jsp";
-					request.setAttribute("responseLabel",
-							"ERROR: Login failed, either the credentials are wrong or the user does not have a login");
 				}
-				break;
 			}
-		}
+			
+			else {
+				switch (operation) {
+				
+				case "goToAboutPage":
+					url = "/About.jsp";
+					break;
+				
+				case "goToTestPage":
+					url = "/TestPage.jsp";
+					break;
 
-		RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
-		rd.forward(request, response);
-		
-		} catch (Exception e) {
-			request.setAttribute("allPersons", facade.findAllPersons());
-			request.setAttribute("allRoles", facade.findAllRoles());
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/EditorSelector.jsp");
+				case "goToPersonEditPage":
+
+					boolean editing = request.getParameter("editing") != null;
+					request.setAttribute("editing", editing);
+
+					Person personSubject = null;
+					if (editing) {
+						String personId = request.getParameter("selectedPerson");
+						if (personId != null) {
+							personSubject = facade.findPersonByPersonId(personId);
+						}
+					}
+					url = this.fillRequestWithPersonInfoAndReturnUrl(personSubject, request);
+					break;
+
+				case "goToRoleEditPage":
+
+					editing = request.getParameter("editing") != null;
+					request.setAttribute("editing", editing);
+
+					Role roleSubject = null;
+					if (editing) {
+						String roleName = request.getParameter("selectedRole");
+						if (roleName != null) {
+							roleSubject = facade.findRoleByRoleName(roleName);
+						}
+					}
+					url = this.fillRequestWithRoleInfoAndReturnUrl(roleSubject, request);
+					break;
+
+				case "goToEditorSelectorPage":
+					url = "/EditorSelector.jsp";
+
+					request.setAttribute("allPersons", facade.findAllPersons());
+					request.setAttribute("allRoles", facade.findAllRoles());
+					break;
+
+				case "loginUser":
+					String username = request.getParameter("username");
+					String password = request.getParameter("password");
+					Login login = facade.findLoginByPersonId(username);
+					if (login != null && login.getPassword().equals(password)) {
+						url = "/EditorSelector.jsp";
+						request.setAttribute("loggedInUser", login.getPerson());
+						request.setAttribute("allPersons", facade.findAllPersons());
+						request.setAttribute("allRoles", facade.findAllRoles());
+					} else {
+						url = "/IndexLogin.jsp";
+						request.setAttribute("responseLabel",
+								"ERROR: Login failed, either the credentials are wrong or the user does not have a login");
+					}
+					break;
+				}
+			}
+
+			RequestDispatcher rd = getServletContext().getRequestDispatcher(url);
 			rd.forward(request, response);
-		}
+
+//		} catch (Exception e) {
+//			request.setAttribute("allPersons", facade.findAllPersons());
+//			request.setAttribute("allRoles", facade.findAllRoles());
+//			RequestDispatcher rd = getServletContext().getRequestDispatcher("/EditorSelector.jsp");
+//			rd.forward(request, response);
+//		}
 	}
 	
 	private enum Mode {
