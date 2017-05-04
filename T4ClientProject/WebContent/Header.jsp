@@ -47,6 +47,21 @@
 		</table>
 	</div>
 	
-	<p style="display:${errorMessage != null ? 'inline' : 'none'}">${errorMessage}</p>
+	<!-- Alert danger -->
+	<c:if test="${errorMessage != null}">
+	<div class="alert alert-danger">
+		<a href="#" class="close" data-dismiss="alert">&times;</a>
+		<strong>Error! </strong>${errorMessage}
+	</div>
+	</c:if>
+	
+	<!-- Alert success -->
+	<c:if test="${successMessage != null}">
+	<div class="alert alert-success">
+		<a href="#" class="close" data-dismiss="alert">&times;</a>
+		<strong>Success! </strong>${successMessage}
+	</div>
+	</c:if>
+	
 </body>
 </html>

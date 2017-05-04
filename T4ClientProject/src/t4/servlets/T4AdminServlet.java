@@ -78,7 +78,7 @@ public class T4AdminServlet extends HttpServlet {
 				try {
 					Person person = this.handlePersonModification(request, mode);
 					url = this.fillRequestWithPersonInfoAndReturnUrl(person, request);
-					request.setAttribute("errorMessage", "Person " + mode.toString().toLowerCase() + "d!");
+					request.setAttribute("successMessage", "Person " + mode.toString().toLowerCase() + "d!");
 				} catch (Exception e) {
 					String errorMessage = this.handleConstraintViolationException(e, EditType.PERSON);
 					request.setAttribute("errorMessage", errorMessage);
@@ -97,7 +97,7 @@ public class T4AdminServlet extends HttpServlet {
 				try {
 					Role role = this.handleRoleModification(request, mode);
 					url = this.fillRequestWithRoleInfoAndReturnUrl(role, request);
-					request.setAttribute("errorMessage", "Role " + mode.toString().toLowerCase() + "d!");
+					request.setAttribute("successMessage", "Role " + mode.toString().toLowerCase() + "d!");
 				} catch (Exception e) {
 					String errorMessage = this.handleConstraintViolationException(e, EditType.ROLE);
 					request.setAttribute("errorMessage", errorMessage);
@@ -246,7 +246,7 @@ public class T4AdminServlet extends HttpServlet {
 				if (!personId.equals("1")) {
 					this.facade.deletePerson(personId);
 				} else {
-					request.setAttribute("responseLabel", "Cannot delete Admin \"1\"");
+					request.setAttribute("errorMessage", "Cannot delete Admin \"1\"");
 				}
 			} else {
 				Person person = new Person();
@@ -254,8 +254,6 @@ public class T4AdminServlet extends HttpServlet {
 				person.setName(request.getParameter("personName"));
 				person.setEmail(request.getParameter("personEmail"));
 				person.setPhoneNbr(request.getParameter("personPhoneNbr"));
-
-				System.out.println("****: " + personId);
 
 				String roleName = request.getParameter("roleName");
 				if (roleName != null) {
@@ -346,8 +344,10 @@ public class T4AdminServlet extends HttpServlet {
 					login.setPassword(request.getParameter("password"));
 
 					if (mode == Mode.UPDATE) {
+						request.setAttribute("successMessage", "Login updated!");
 						return this.facade.updateLogin(login);
 					} else if (mode == Mode.CREATE) {
+						request.setAttribute("successMessage", "Login created!");
 						return this.facade.createLogin(login);
 					}
 				} else {
