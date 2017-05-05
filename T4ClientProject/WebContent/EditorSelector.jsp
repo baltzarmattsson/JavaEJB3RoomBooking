@@ -17,7 +17,7 @@
 	<div class="container">
 	<jsp:include page="Header.jsp" />
 	<h3>Choose editor</h3>
-	<ul class="nav nav-pills">
+	<ul class="nav nav-pills" style="margin-bottom: 15px;">
 		<li class="active"><a data-toggle="pill" href="#personEditorArea">Edit persons and logins</a></li>
 		<li><a data-toggle="pill" href="#roleEditorArea">Edit roles</a></li>
 	</ul>

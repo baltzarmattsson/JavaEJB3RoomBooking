@@ -58,7 +58,7 @@
 		<c:forEach items="${tests}" var="test">
 			<input name="suite" value="${test.getValue()}" type="hidden" />
 		</c:forEach>
-		<input class="btn btn-success" type=submit value="Create new role" />
+		<input class="btn btn-success" type=submit value="Run all tests" />
 	</form>
 	
 	</div>
